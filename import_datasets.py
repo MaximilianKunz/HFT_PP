@@ -23,7 +23,6 @@ no_datasets = fractions + 2
 length_datasets = int(round(rows / no_datasets))
 
 # print(df_import.head)
-
 # transform dataframe to array
 array_unsorted = df_import.to_numpy()
 # print("Unsorted Array:")
