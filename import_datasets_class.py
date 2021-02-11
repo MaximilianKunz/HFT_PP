@@ -13,6 +13,10 @@ class ReadSedResults:
         self.timesteps = int()
         self.list_timesteps = []
         self.get_timesteps(file_name)
+        self.list_timesteps_columns = []
+        self.create_list_timesteps_columns
+        self.list_time_columns = []
+        self.create_list_time_columns
 
     def get_data(self, file_name):
         df_import = pd.read_table(file_name, skiprows=1)
@@ -37,6 +41,19 @@ class ReadSedResults:
         tstep3 = np.asanyarray(tstep2).astype(float)
         self.list_timesteps = tstep3[0:self.timesteps:1, 1]
 
+    def create_list_timesteps_columns(self):
+        list = []
+        count_ts = 1
+        while True:
+            list1 = [count_ts] * self.nodes
+            list.append(list1)
+            count_ts += 1  # Replaces count = count + 1
+            if count_ts > self.timesteps:
+                break
+        self.list_timesteps_columns = list
+
+    def create_list_time_columns(self):
+
     def transform_data(self):
         # read total number of lines from the dataframe
         lines = self.data_imported.shape[0]
@@ -53,20 +70,8 @@ class ReadSedResults:
         columns.append("Mean diameter")
         columns.append("Layer thickness")
         # turn array back to dataframe
-        self.data_transformed = pd.DataFrame(array_sorted_transposed, columns=columns)
-
-# Import of the Active Layer File
-active_layer = ReadSedResults(file_name = "Datasets_AL.dat")
-active_layer.get_data(file_name = "Datasets_AL.dat")
-
-# Reading the Timesteps from the Active Layer File
-active_layer.get_timesteps(file_name = "Datasets_AL.dat")
-print("Number of time steps: {0}".format(active_layer.timesteps))
-active_layer.create_list_timesteps(file_name="Datasets_AL.dat")
-print("List of timesteps")
-print(active_layer.list_timesteps)
-
-# Transform the Data of the Active Layer File
-active_layer.transform_data()
-print(active_layer.data_transformed)
-print(active_layer.data_transformed.dtypes)
+        data_in_columns = pd.DataFrame(array_sorted_transposed, columns=columns)
+        # turn datatype from object to float, all non-floats will be NaNs
+        data_as_float = data_in_columns.apply(pd.to_numeric, errors='coerce')
+        # delete rows that have NaN values
+        self.data_transformed = data_as_float.dropna(axis=0, how='all').reset_index(drop=True)
