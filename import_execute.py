@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 from import_datasets_class import ReadSedResults
 
 # Import of the Active Layer File
@@ -9,9 +7,18 @@ active_layer.get_data(file_name = "Datasets_AL.dat")
 # Reading the Timesteps from the Active Layer File
 active_layer.get_timesteps(file_name = "Datasets_AL.dat")
 print("Number of time steps: {0}".format(active_layer.timesteps))
+
+# Creating a list of timesteps
 active_layer.create_list_timesteps(file_name="Datasets_AL.dat")
-print("List of timesteps")
+print("List of timesteps:")
 print(active_layer.list_timesteps)
+
+# Creating a list of timesteps for the columns
+active_layer.create_list_timesteps_columns()
+
+# Creating a list of simulation time for the columns
+active_layer.create_list_time_columns()
+print(len(active_layer.list_time_columns))
 
 # Transform the Data of the Active Layer File
 active_layer.transform_data()
