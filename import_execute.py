@@ -18,9 +18,11 @@ active_layer.create_list_timesteps_columns()
 
 # Creating a list of simulation time for the columns
 active_layer.create_list_time_columns()
-print(len(active_layer.list_time_columns))
 
 # Transform the Data of the Active Layer File
 active_layer.transform_data()
 print(active_layer.data_transformed)
 print(active_layer.data_transformed.dtypes)
+
+# Export Dataframe as CSV-file
+active_layer.data_transformed.to_csv('Data_transformed.csv', index=False)

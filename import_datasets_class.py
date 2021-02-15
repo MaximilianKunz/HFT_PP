@@ -72,7 +72,7 @@ class ReadSedResults:
         count_ts = 1
         while True:
             list1 = [count_ts] * self.nodes
-            list.append(list1)
+            list.extend(list1)
             count_ts += 1  # Replaces count = count + 1
             if count_ts > self.timesteps:
                 break
@@ -87,7 +87,7 @@ class ReadSedResults:
         count_ts1 = 0
         while True:
             list3 = [self.list_timesteps[count_ts1]] * self.nodes
-            list2.append(list3)
+            list2.extend(list3)
             count_ts1 += 1  # Replaces count = count + 1
             if count_ts1 > (self.timesteps - 1):
                 break
@@ -118,9 +118,15 @@ class ReadSedResults:
         # turn datatype from object to float, all non-floats will be NaNs
         data_as_float = data_in_columns.apply(pd.to_numeric, errors='coerce')
         # delete rows that have NaN values
-        data_without_nan = data_as_float.dropna(axis=0, how='all').reset_index(drop=True)
-        # insert columns for timestep and time in seconds
+        df_data = data_as_float.dropna(axis=0, how='all').reset_index(drop=True)
+        # create dataframes for timestep and time in seconds
+        df_timesteps = pd.DataFrame(self.list_timesteps_columns, columns=["Timestep"])
+        df_time = pd.DataFrame(self.list_time_columns, columns=["Time (seconds)"])
         # data_with_timesteps = data_without_nan.insert(0, "Timestep", self.list_timesteps_columns)
         # data_with_time = data_with_timesteps.insert(1, "Time (seconds)", self.list_time_columns)
+        # merge dataframes to one dataframe
+        df_transformed = pd.concat([df_timesteps.reset_index(drop=True), df_time.reset_index(drop=True),
+                                    df_data.reset_index(drop=True)], axis=1)
         # transformed dataframe
-        self.data_transformed = data_without_nan
+        self.data_transformed = df_transformed
+
