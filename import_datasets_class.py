@@ -8,9 +8,10 @@ class ReadSedResults:
         The class was written by Max with assistance of Maria for the get_timesteps and create_list_timesteps functions.
         :param file_name: File name of either the Dataset of the Active Layer or Under Layer to import
         """
-        self.nodes = 61803  # should be read from .2dm file
-        self.fractions = 8  # should be read from .2dm file
-        self.datasets = self.fractions +2
+        self.nodes = int()  # should be read from .2dm file
+        self.fractions = int()  # should be read from .2dm file
+        self.datasets = int ()
+        self.get_datasets()
         self.data_imported = pd.DataFrame
         self.get_data(file_name)
         self.timesteps = int()
@@ -23,6 +24,9 @@ class ReadSedResults:
         self.create_list_time_columns()
         self.data_transformed = pd.DataFrame
         self.transform_data()
+
+    def get_datasets(self):
+        self.datasets = self.fractions + 2
 
     def get_data(self, file_name):
         """
@@ -48,7 +52,7 @@ class ReadSedResults:
 
     def create_list_timesteps(self, file_name):
         """
-        Creates a list of the timesteps by reading them from the imported result file
+        Creates a list of the timesteps by reading them from the imported Datset
         :param file_name: File name of the Layer Dataset to import
         :return: List of timesteps in seconds
         """
@@ -122,8 +126,6 @@ class ReadSedResults:
         # create dataframes for timestep and time in seconds
         df_timesteps = pd.DataFrame(self.list_timesteps_columns, columns=["Timestep"])
         df_time = pd.DataFrame(self.list_time_columns, columns=["Time (seconds)"])
-        # data_with_timesteps = data_without_nan.insert(0, "Timestep", self.list_timesteps_columns)
-        # data_with_time = data_with_timesteps.insert(1, "Time (seconds)", self.list_time_columns)
         # merge dataframes to one dataframe
         df_transformed = pd.concat([df_timesteps.reset_index(drop=True), df_time.reset_index(drop=True),
                                     df_data.reset_index(drop=True)], axis=1)
