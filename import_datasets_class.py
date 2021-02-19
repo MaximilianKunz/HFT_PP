@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 class ReadSedResults:
     def __init__(self, file_name="Datasets_Al.dat"):
         """
