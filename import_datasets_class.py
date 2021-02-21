@@ -9,9 +9,9 @@ class ReadSedResults:
         The class was written by Max with assistance of Maria for the get_timesteps and create_list_timesteps functions.
         :param file_name: File name of either the Dataset of the Active Layer or Under Layer to import
         """
-        self.nodes = int()  # should be read from .2dm file
-        self.fractions = int()  # should be read from .2dm file
-        self.datasets = int ()
+        self.nodes = int()
+        self.fractions = int()
+        self.datasets = int()
         self.get_datasets()
         self.data_imported = pd.DataFrame
         self.get_data(file_name)
@@ -132,4 +132,3 @@ class ReadSedResults:
                                     df_data.reset_index(drop=True)], axis=1)
         # transformed dataframe
         self.data_transformed = df_transformed
-
