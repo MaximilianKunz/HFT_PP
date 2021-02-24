@@ -1,15 +1,14 @@
 from import_datasets_class import *
-from import_2dm_class import *
+from mesh import *
 from calculate_gsd_class import *
+from plotfig import *
 
-
-def create_array(name, file_name):
+def create_array(name, file_name, file2dm):
     # Import of the Active Layer File
     layer = ReadSedResults(file_name)
     layer.get_data(file_name)
     # Import number of nodes and fractions from 2dm file
-    # layer.nodes = read2DM.get_num_nodes(file2dm)
-    layer.nodes = 61803
+    layer.nodes = read2DM.get_num_nodes(file2dm)
     # layer.fractions = read2DM.num_fractions(file2dm)
     layer.fractions = 8
     # Calculate no. of datasets
@@ -45,11 +44,11 @@ def append_gsd(name, csv_file):
 
 def main():
     # create array for active layer
-    create_array(name='AL', file_name='Datasets_AL.dat')
+    create_array(name='AL', file_name='Datasets_AL.dat', file2dm=glob.glob('*.2dm'))
     # append grain size distributions to array of active layer
     append_gsd(name='AL', csv_file="Data_transformed_AL.csv")
     # create array for under layer
-    create_array(name='UL', file_name='Datasets_UL.dat')
+    create_array(name='UL', file_name='Datasets_UL.dat', file2dm=glob.glob('*.2dm'))
     # append grain size distributions to array of under layer
     append_gsd(name='UL', csv_file="Data_transformed_UL.csv")
 
@@ -57,6 +56,12 @@ def main():
     # plot_transform = data_transformed[0,3:11]
     # D_char= plot_grain(plot_transform)
 
+    # Export grain distribution at node ? and t ?
+    #print (data_transformed[0, 1])
+    # D_char= plot_grain(plot_transform)
+    A = [0.1, 0.2, 0.3, 0.4]
+    B = [10, 200, 600, 400]
+    m = plot_grain (A, B)
 
 if __name__ == '__main__':
     # launch main function

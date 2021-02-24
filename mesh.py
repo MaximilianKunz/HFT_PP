@@ -1,30 +1,31 @@
-import glob
-import numpy as np
-
-file2dm = glob.glob('*.2dm')
-file = open(file2dm[0], 'r')
-# print(file2dm)
-
-#path = str(path)
-#if filehdft.endswith('*AL.dat'):
-#    path = extractall (outpatch)
-#else:
-#    raise ValueError('Unsupported archive provided. Method supports only .zip/.gz files.')
-#file2 = open('Datasets_AL.dat')
+from config import *
 
 class read2DM:
-    def __init__(self):
+    def __init__(self, file2dm):
+        """
+        This class reads the mesh files with the extension .2dm and get the most important information necessary to transform the data.
+        The class was written by Maria.
+        :param file2dm
+        """
+#       self.readmesh()
         self.get_num_nodes()
 #        self.num_nodes = int()
 #        self.list_nodes = []
 #        self.create_list_nodes()
 #        self.num_fractions = int()
         self.num_fractions()
+#    def readmesh(self, file2dm):
+#        try:
+#            file = open(file2dm[0], 'r')
+#        except ImportError:
+#            print("ERROR: Cannot find 2dm file in the folder")
+#        return file
 
-    def get_num_nodes(self):
+    def get_num_nodes(file2dm):
         nodes = 0
         elements = 0
         nodestrings = 0
+        file = open(file2dm[0], 'r')
         for line in iter(file):
             if line.startswith('ND'):
                 nodes += 1
@@ -33,10 +34,10 @@ class read2DM:
             elif line.startswith('E'):
                 elements += 1
         return nodes
-#        self.num_nodes = nodes
 
-    def create_list_nodes(self):
+    def create_list_nodes(file2dm):
         list2 = []
+        file = open(file2dm[0], 'r')
         for line in iter(file):
             if line.startswith('ND'):
                 list2.append(line.split())
@@ -49,18 +50,18 @@ class read2DM:
         z = list4[:, 3]
         print(list4)
 
-    def num_fractions(self):
+    def num_fractions(file2dm):
         fractions = []
+        file = open(file2dm[0], 'r')
         for line in iter(file):
             if line.startswith('GP_VAL 2 28'):
                 fractions.append(line.split())
-        fractions = np.asanyarray(fractions)
-        print(fractions)
-        fractions2 = fractions[0, 3]
-        print(fractions2)
-        num_fractions = int(fractions2[0])
-        return num_fractions
+        print (fractions)
+        #list2 = np.asanyarray(fractions)
+        #print (list2)
+        num_fractions= [i[3] for i in fractions]
+        print (num_fractions)
+        return int(num_fractions)
 
-m = read2DM.num_fractions(file2dm)
-print(m)
-
+m = read2DM.num_fractions(glob.glob('*.2dm'))
+print (m)
