@@ -2,11 +2,12 @@ from config import *
 
 
 class ReadSedResults:
-    def __init__(self, file_name="Datasets_Al.dat"):
+    def __init__(self, file_name):
         """
-        This class reads the result files of a Hydro-FT simulation and transforms them into an array (Pandas Dataframe).
+        This class provides all the functions to read result files of a Hydro-FT simulation
+        and transform them into an array (pandas dataframe).
         The class was written by Max with assistance of Maria for the get_timesteps and create_list_timesteps functions.
-        :param file_name: File name of either the Dataset of the Active Layer or Under Layer to import
+        :param file_name: File name of either the dataset of the active layer or under layer to import
         """
         self.nodes = int()
         self.fractions = int()
@@ -22,26 +23,33 @@ class ReadSedResults:
         self.create_list_timesteps_columns()
         self.list_time_columns = []
         self.create_list_time_columns()
+        self.list_nodes_columns = []
+        self.create_list_nodes_columns()
         self.data_transformed = pd.DataFrame
         self.transform_data()
 
     def get_datasets(self):
+        """
+        Reads the number of datasets in the file (each fraction represents one dataset,
+        additionally the mean diameter and layer thickness are written to the result file).
+        :return: Number of datasets in the file
+        """
         self.datasets = self.fractions + 2
 
     def get_data(self, file_name):
         """
-        Imports the result file and turns it into a Pandas Dataframe
-        :param file_name: File name of the Layer Dataset to import
-        :return: Pandas Dataframe of the imported Dataset
+        Imports the result file and turns it into a pandas dataframe
+        :param file_name: File name of either the dataset of the active layer or under layer to import
+        :return: Pandas dataframe of the imported dataset
         """
         df_import = pd.read_table(file_name, skiprows=1)
         self.data_imported = df_import.rename(columns={'OBJTYPE "mesh2d"': 'Datasets'})
 
     def get_timesteps(self, file_name):
         """
-        Reads the number of timesteps from the imported Dataset
-        :param file_name: File name of the Layer Dataset to import
-        :return: Number of timesteps (integer)
+        Reads the number of time steps from the imported dataset
+        :param file_name: File name of either the dataset of the active layer or under layer to import
+        :return: Number of time steps
         """
         file = open(file_name)
         timestep = 0
@@ -52,9 +60,9 @@ class ReadSedResults:
 
     def create_list_timesteps(self, file_name):
         """
-        Creates a list of the timesteps by reading them from the imported Datset
-        :param file_name: File name of the Layer Dataset to import
-        :return: List of timesteps in seconds
+        Creates a list of the time steps by reading them from the imported dataset
+        :param file_name: File name of either the dataset of the active layer or under layer to import
+        :return: List of time steps in seconds
         """
         file = open(file_name)
         tstep = []
@@ -69,8 +77,8 @@ class ReadSedResults:
 
     def create_list_timesteps_columns(self):
         """
-        Creates a list of timestep numbers to be used as a column in the final dataframe
-        :return: List of timestep numbers for dataframe
+        Creates a list of time step numbers to be used as a column in the final dataframe
+        :return: List of time step numbers for dataframe
         """
         list = []
         count_ts = 1
@@ -97,10 +105,18 @@ class ReadSedResults:
                 break
         self.list_time_columns = list2
 
+    def create_list_nodes_columns(self):
+        """
+        Creates a list of node IDs to be used as a column in the final dataframe
+        :return: List of node IDs for dataframe
+        """
+        list_nodes = list(range(1, self.nodes + 1, 1)) * self.timesteps
+        self.list_nodes_columns = list_nodes
+
     def transform_data(self):
         """
         Transforms the imported data into a dataframe with one column for each dataset (fractions, mean diameter, layer thickness)
-        and additional columns for the timestep number and the simulation time
+        and additional columns for the node ID, timestep number and the simulation time
         :return: Dataframe of imported data
         """
         # read total number of lines from the imported dataframe
@@ -123,16 +139,17 @@ class ReadSedResults:
         data_as_float = data_in_columns.apply(pd.to_numeric, errors='coerce')
         # delete rows that have NaN values
         df_data = data_as_float.dropna(axis=0, how='all').reset_index(drop=True)
-        # create dataframes for timestep and time in seconds
+        # create dataframes for node ID, time step and time in seconds
+        df_nodeid = pd.DataFrame(self.list_nodes_columns, columns=["Node ID"])
         df_timesteps = pd.DataFrame(self.list_timesteps_columns, columns=["Timestep"])
         df_time = pd.DataFrame(self.list_time_columns, columns=["Time (seconds)"])
         # merge dataframes to one dataframe
         df_transformed = pd.concat([df_timesteps.reset_index(drop=True), df_time.reset_index(drop=True),
-                                    df_data.reset_index(drop=True)], axis=1)
+                                    df_nodeid.reset_index(drop=True), df_data.reset_index(drop=True)], axis=1)
         # transformed dataframe
         self.data_transformed = df_transformed
 
-    #def slice_data(self):
+    # def slice_data(self):
     #    slice1= self.data_transformed
     #    slice=slice1.iloc[[:, 2:3]]
     #    self.slice_data=slice
