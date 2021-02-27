@@ -1,4 +1,4 @@
-from import_datasets_class import *
+from datasets import *
 from import_2dm_class import *
 from plot_graindist import *
 

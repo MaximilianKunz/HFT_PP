@@ -1,7 +1,8 @@
-from import_datasets_class import *
+from datasets import *
 from mesh import *
-from calculate_gsd_class import *
+from calculate_gsd import *
 from plotfig import *
+
 
 def create_array(name, file_name, file2dm):
     # Import of the Active Layer File
@@ -61,7 +62,7 @@ def main():
     # D_char= plot_grain(plot_transform)
 
     # Export grain distribution at node ? and t ?
-    #print (data_transformed[0, 1])
+    # print (data_transformed[0, 1])
     # D_char= plot_grain(plot_transform)
     A = [0.1, 0.200, 0.600, 0.400, 0.500, 0.600, 0.270, 0.50]
     B = [10, 200, 600, 400, 500, 600, 270, 50]
@@ -69,6 +70,7 @@ def main():
     C = [10, 200, 600, 400, 500, 600, 270, 50]
     D = [1, 2, 6, 10, 20, 60, 270, 500]
     n = plot_d50 (C, D)
+
 
 if __name__ == '__main__':
     # launch main function

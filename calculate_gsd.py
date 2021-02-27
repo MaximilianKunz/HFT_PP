@@ -1,4 +1,4 @@
-from import_datasets_class import *
+from datasets import *
 
 
 class CalculateGSD:
