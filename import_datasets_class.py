@@ -130,3 +130,8 @@ class ReadSedResults:
                                     df_data.reset_index(drop=True)], axis=1)
         # transformed dataframe
         self.data_transformed = df_transformed
+
+    #def slice_data(self):
+    #    slice1= self.data_transformed
+    #    slice=slice1.iloc[[:, 2:3]]
+    #    self.slice_data=slice

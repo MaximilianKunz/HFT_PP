@@ -56,12 +56,16 @@ class read2DM:
         for line in iter(file):
             if line.startswith('GP_VAL 2 28'):
                 fractions.append(line.split())
-        print (fractions)
+        #print (fractions)
         #list2 = np.asanyarray(fractions)
         #print (list2)
-        num_fractions= [i[3] for i in fractions]
-        print (num_fractions)
-        return int(num_fractions)
+        #num_fractions2= [i[3] for i in fractions]
+        #print(num_fractions2)
+        #fractions = pd.DataFrame(num_fractions2)
+        fractions2 = pd.DataFrame(fractions)
+        num_fractions = int(fractions2.iloc[0,3])
+        return num_fractions
 
-m = read2DM.num_fractions(glob.glob('*.2dm'))
-print (m)
+#m = read2DM.num_fractions(file2dm=glob.glob('*.2dm'))
+#print (m)
+
