@@ -27,7 +27,7 @@ diameter, layer thickness) for every node and every time step
 
 2) A second database which also includes the grain size distribution (sum curve) for every node at every time step
 
-In addition, the options to plot grain size distributions and the mean diameter are implemented.
+***In addition, the options to plot grain size distributions and the mean diameter are implemented.***
 
 ***
 
@@ -48,6 +48,7 @@ The codes use the following *Python* packages:
  - `numpy`
  - `pandas`
  - `time`
+ - ***More packages required?***
 
 ***
 
@@ -74,8 +75,8 @@ result files of all time steps to *Datasets_UL.dat*.
 6. Download the *HFT_PP* repository and save the contents to a local folder.
 7. Add the files *hydro_as-2d.2dm*, *Datasets_AL.dat* and *Datasets_UL.dat* to 
 the same folder.
-8. Run the *main.py* file. Enter ??? if you want to activate plotting of the
-grain size distribution and the mean diameter.
+8. Run the *main.py* file. ***Enter ??? if you want to activate plotting of the
+grain size distribution and the mean diameter.***
 Be patient, this might take some time,
 depending on the size of your mesh and the number of time steps you selected to export.
 
@@ -86,28 +87,38 @@ depending on the size of your mesh and the number of time steps you selected to 
  every time step will be exported to *Data_transformed_AL.csv* and *Data_transformed_UL.csv*.
 11. Tha database which also includes the grain size distributions (sum curve) will be
 exported to *Data_GSD_AL.csv* and *Data_GSD_UL.csv*.
-12. The plots ...
+12. ***The plots ...***
 
 ### Code diagram
-Enter the code diagram here.
+***Enter the code diagram here.***
 
 ### Files and classes
 - **config.py**: This file contains the import of the required *Python* packages and
 declares the *2dmfile* as a global variable. This can be done because the file always
 has to be called *hydro_as-2d.2dm* in order for the simulation to run in *Hydro_FT-2D*.
 - **mesh.py**: This file contains the *Read2DM* class, which reads parameters 
-from the *hydro_as-2d.2dm* file. It contains functions to read the number of nodes and fractions
+from the *hydro_as-2d.2dm* file. It contains methods to read the number of nodes and fractions
 and to create a list of the mesh nodes.
 - **datasets.py**: This file contains the *ReadSedResults* class, which reads the *Datasets* 
-files and contains functions needed to create the database of result files later exported as a 
-.csv-file. These functions include getting the number of time steps and datasets as well as
+files and contains methods needed to create the database of result files later exported as a 
+.csv-file. These methods include getting the number of time steps and datasets as well as
 creating lists of the time steps, time (in seconds) and node IDs which are later used as columns
-in the database. The *transform_data* function then re-organizes all the results and creates a 
+in the database. The *transform_data* method then re-organizes all the results and creates a 
 pandas dataframe representing the database. The class works for both the active and under layer. 
 Therefore, only the *file name* of the layer is required as an argument.
-- **calculate_gsd.py**:
-- **plotfig.py**:
-- **main.py**:
+- **calculate_gsd.py**: This file contains the *CalculateGSD* class, which contains methods to
+read the previously built database and calculate the grain size distributions for every node and
+time step.
+- **plotfig.py**: ***Enter description here***
+- **main.py**: In this file, first the numbers of nodes and fractions are read by using the methods
+implemented in the *Read2DM* class. Two functions are created: The *create_array* function uses the
+methods of the *ReadSedResults* class in order to create a pandas dataframe representing the database
+of the results written by *Hydro_FT-2D*. The dataframe is then exported as a .csv-file. The *append_gsd*
+function uses the methods of the *CalculateGSD* class in order to append the grain size distributions
+to the previously built dataframe and export it as a .csv-file. Furthermore, log actions are 
+implemented. The *main* function then uses the previously mentioned functions to create the databases
+for both the active and under layer and export them. ***Describe plots in the main function***. A 
+performance counter is implemented to indicate the time needed for running the code.
 
 ### Authors
 The code was developped by 
