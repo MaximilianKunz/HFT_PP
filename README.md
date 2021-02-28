@@ -74,10 +74,10 @@ result files of all time steps to *Datasets_UL.dat*.
 6. Download the *HFT_PP* repository and save the contents to a local folder.
 7. Add the files *hydro_as-2d.2dm*, *Datasets_AL.dat* and *Datasets_UL.dat* to 
 the same folder.
-8. Run the *main.py* file. ***If you want to activate plotting of the
+8. Run the *main.py* file. If you want to activate plotting of the
 grain size distribution and the mean diameter call the respective functions. It is advisable to first plot 
 the mean diameter over time and then identify a change in simulation time. With this information, the next
-next step is to plot the distribution of the grains*.***
+next step is to plot the distribution of the grains.
 Be patient, this might take some time,
 depending on the size of your mesh and the number of time steps you selected to export.
 
