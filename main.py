@@ -10,6 +10,8 @@ mesh.get_num_fractions(file2dm)
 nodes = mesh.num_nodes
 fractions = mesh.num_fractions
 dm_fractions = mesh.get_dm_fractions(file2dm)
+list_nodes = mesh.create_list_nodes(file2dm)
+
 
 def create_array(name, file_name):
     """
@@ -42,9 +44,7 @@ def create_array(name, file_name):
     # Export the dataframe as a csv-file
     layer.data_transformed.to_csv('Data_transformed_{}.csv'.format(name), index=False)
     df = layer.data_transformed
-    #A = layer.data_transformed.iloc[12, 3:11]
-    #B= layer.data_transformed["Node ID"] == 1
-    #print(B)
+
     # Print information
     print("The array of the {0} has been successfully exported as Data_transformed_{0}.csv".format(name))
     print("Number of nodes: {0}".format(layer.nodes))
@@ -52,6 +52,7 @@ def create_array(name, file_name):
     print("Number of datasets: {0}".format(layer.datasets))
     print("Number of time steps: {0}".format(layer.timesteps))
     return df
+
 
 def append_gsd(name, csv_file):
     """
@@ -71,11 +72,23 @@ def append_gsd(name, csv_file):
     return df1
 
 def slice_array_d50(df,idNode):
+    """
+    This function allows to slice the array resulting from the create_array function. The slicing is performed
+    by a boolean mask in which the array is filtered according to the ID_Node specified by the user and then
+    only the columns corresponding to time and mean diameter are extracted.
+    :param df (can be the array of the AL or UL), idNode
+    """
     array = df[df["Node ID"] == idNode]
     subarray = array.iloc[:, [1, 11]]
     return subarray
 
 def slice_array_graindist(df1,idNode,timestep):
+    """
+    This function allows to slice the array resulting from the append_gsd function. The slicing is performed
+    by a boolean mask in which the array is filtered according to the ID_Node and the timestep specified by the
+    user and then only the columns corresponding to sum fractions (Sum1, Sum2, etc) are extracted.
+    :param df1 (can be the array of the AL or UL), idNode, timestep
+    """
     array = df1[df1["Node ID"] == idNode]
     subarray = array.iloc[timestep, 13:21]
     return subarray
@@ -101,24 +114,22 @@ def main():
     Create csv-files of the resorted existing result files and additionally calculate grain size distributions for each node
     at every time step
     :return: csv-files files of result data with and without grain size distributions
+    :return: show and save plot in script directory as plotd50.png and graindist.png
     """
     # create array for active layer
     df = create_array(name='AL', file_name='Datasets_AL.dat')
-    #A=df.iloc[12, 2:10]
     # append grain size distributions to array of active layer
     df1= append_gsd(name='AL', csv_file="Data_transformed_AL.csv")
     # create array for under layer
-    create_array(name='UL', file_name='Datasets_UL.dat')
+    df2=create_array(name='UL', file_name='Datasets_UL.dat')
     # append grain size distributions to array of under layer
-    append_gsd(name='UL', csv_file="Data_transformed_UL.csv")
-
-    # Export mean diameter at idNode (?)
-    C = slice_array_d50(df=df, idNode=1)
-    n = plot_d50(C)
-
-    # Export grain distribution at idNode (?) and timestep (?)
-    A = slice_array_graindist(df1=df1, idNode=1,timestep=1)
-    m = plot_grain (A, dm_fractions)
+    df3=append_gsd(name='UL', csv_file="Data_transformed_UL.csv")
+    # Plot the Mean diameter along the simulation time at idNode specified by the user. It is necessary to
+    # specify the array (df) and idNode
+    m = plot_d50(slice_array_d50(df=df, idNode=26264))
+    # Plot the Grain distribution at specific idNode and timestep. It is necessary to specify the array (df), idNode
+    # and timestep (?)
+    n = plot_grain (slice_array_graindist(df1=df1, idNode=26264, timestep=1), dm_fractions)
 
 if __name__ == '__main__':
     # run code and evaluate performance
