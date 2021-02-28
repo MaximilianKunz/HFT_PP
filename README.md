@@ -54,7 +54,7 @@ The codes use the following *Python* packages:
 ### Usage
 This is a step-by-step manual on how to use the code:
 
-##### 1. Running the Simulation and Postprocessing with SMS:
+#### Running the Simulation and Postprocessing with SMS:
 1. Run a morphodynamic simulation with *Hydro_FT-2D*.
 2. After the simulation is finished, open the file *hydro_as-2d.2dm* in *SMS*.
 The file contains the mesh and global simulation parameters.
@@ -70,7 +70,7 @@ and export it to a folder of your choice.
 5. Repeat steps 3 and 4 for the under layer by loading the file *UL.dat* and exporting all 
 result files of all time steps to *Datasets_UL.dat*.
 
-##### 2. Download, Input and Running the Code
+#### Download, Input and Running the Code
 6. Download the *HFT_PP* repository and save the contents to a local folder.
 7. Add the files *hydro_as-2d.2dm*, *Datasets_AL.dat* and *Datasets_UL.dat* to 
 the same folder.
@@ -79,7 +79,7 @@ grain size distribution and the mean diameter.
 Be patient, this might take some time,
 depending on the size of your mesh and the number of time steps you selected to export.
 
-##### 3. Output
+#### Output
 9. Logging information will be written to the *logfile.log*.
 10. The database containing the morphodynamic results written by *Hydro_FT-2D* 
 (percentiles of the fractions, mean graindiameter, layer thickness) for every node and
