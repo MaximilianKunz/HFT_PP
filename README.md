@@ -91,7 +91,7 @@ exported to *Data_GSD_AL.csv* and *Data_GSD_UL.csv*.
 12. The following figures will be shown and exported as png: 1) Mean diameter over time and the grain distribution and 2) Grain distribution.
 
 ### Code diagram
-***Enter the code diagram here.***
+[![Image](Python.png)]
 
 ### Files and classes
 - **config.py**: This file contains the import of the required *Python* packages and
