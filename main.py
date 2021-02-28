@@ -9,7 +9,7 @@ mesh.get_num_nodes(file2dm)
 mesh.get_num_fractions(file2dm)
 nodes = mesh.num_nodes
 fractions = mesh.num_fractions
-
+dm_fractions = mesh.get_dm_fractions(file2dm)
 
 def create_array(name, file_name):
     """
@@ -41,16 +41,17 @@ def create_array(name, file_name):
     layer.transform_data()
     # Export the dataframe as a csv-file
     layer.data_transformed.to_csv('Data_transformed_{}.csv'.format(name), index=False)
-    #A = layer.data_transformed.iloc[12, 2:10]
-    #return A
-
+    df = layer.data_transformed
+    #A = layer.data_transformed.iloc[12, 3:11]
+    #B= layer.data_transformed["Node ID"] == 1
+    #print(B)
     # Print information
     print("The array of the {0} has been successfully exported as Data_transformed_{0}.csv".format(name))
     print("Number of nodes: {0}".format(layer.nodes))
     print("Number of fractions: {0}".format(layer.fractions))
     print("Number of datasets: {0}".format(layer.datasets))
     print("Number of time steps: {0}".format(layer.timesteps))
-
+    return df
 
 def append_gsd(name, csv_file):
     """
@@ -64,8 +65,20 @@ def append_gsd(name, csv_file):
     layer.read_csv(csv_file)
     layer.fractions = fractions
     layer.calculate_gsd()
+    df1 = layer.data_gsd
     layer.data_gsd.to_csv('Data_GSD_{}.csv'.format(name), index=False)
     print("The grain size distributions of the {0} have been successfully added to the file Data_GSD_{0}.csv".format(name))
+    return df1
+
+def slice_array_d50(df,idNode):
+    array = df[df["Node ID"] == idNode]
+    subarray = array.iloc[:, [1, 11]]
+    return subarray
+
+def slice_array_graindist(df1,idNode,timestep):
+    array = df1[df1["Node ID"] == idNode]
+    subarray = array.iloc[timestep, 13:21]
+    return subarray
 
 
 def log_actions(fun):
@@ -90,28 +103,22 @@ def main():
     :return: csv-files files of result data with and without grain size distributions
     """
     # create array for active layer
-    create_array(name='AL', file_name='Datasets_AL.dat')
+    df = create_array(name='AL', file_name='Datasets_AL.dat')
+    #A=df.iloc[12, 2:10]
     # append grain size distributions to array of active layer
-    append_gsd(name='AL', csv_file="Data_transformed_AL.csv")
+    df1= append_gsd(name='AL', csv_file="Data_transformed_AL.csv")
     # create array for under layer
     create_array(name='UL', file_name='Datasets_UL.dat')
     # append grain size distributions to array of under layer
     append_gsd(name='UL', csv_file="Data_transformed_UL.csv")
 
-    # Export grain distribution at node ? and t ?
-    # plot_transform = data_transformed[0,3:11]
-    # D_char= plot_grain(plot_transform)
+    # Export mean diameter at idNode (?)
+    C = slice_array_d50(df=df, idNode=1)
+    n = plot_d50(C)
 
-    # Export grain distribution at node ? and t ?
-    # print (data_transformed[0, 1])
-    # D_char= plot_grain(plot_transform)
-    A = [0.1, 0.200, 0.600, 0.400, 0.500, 0.600, 0.270, 0.50]
-    B = [10, 200, 600, 400, 500, 600, 270, 50]
-    m = plot_grain (A, B)
-    C = [10, 200, 600, 400, 500, 600, 270, 50]
-    D = [1, 2, 6, 10, 20, 60, 270, 500]
-    n = plot_d50 (C, D)
-
+    # Export grain distribution at idNode (?) and timestep (?)
+    A = slice_array_graindist(df1=df1, idNode=1,timestep=1)
+    m = plot_grain (A, dm_fractions)
 
 if __name__ == '__main__':
     # run code and evaluate performance

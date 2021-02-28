@@ -15,6 +15,7 @@ class Read2DM:
         self.create_list_nodes(file2dm)
         self.num_fractions = int()
         self.get_num_fractions(file2dm)
+        self.get_dm_fractions(file2dm)
 
     def get_num_nodes(self, file2dm):
         nodes = 0
@@ -54,3 +55,18 @@ class Read2DM:
         fractions2 = pd.DataFrame(fractions)
         num_fractions = int(fractions2.iloc[0,3])
         self.num_fractions = num_fractions
+
+    def get_dm_fractions(self, file2dm):
+        dmfractions = []
+        mesh_file = open(file2dm[0], 'r')
+        for line in iter(mesh_file):
+            if line.startswith('GP_VAL 2 2'):
+                dmfractions.append(line.split())
+            elif line.startswith('GP_VAL 2 3'):
+                dmfractions.append(line.split())
+        dm_fractions2 = pd.DataFrame(dmfractions)
+        dm_fractions = dm_fractions2.iloc[1:9,3]
+        #dm_fractions = dm_fractions2[dm_fractions2[2] > 28]
+        #self.dm_fractions = dm_fractions
+        #print (dm_fractions)
+        return dm_fractions
