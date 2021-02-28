@@ -126,4 +126,5 @@ The code was developped by
 & [Maximilian Kunz](https://www.iws.uni-stuttgart.de/institut/team/Kunz-00002/)
 at the [Department of Hydraulic Engineering and Water Resources Management](https://www.iws.uni-stuttgart.de/en/lww/)
 of the [University of Stuttgart](https://www.uni-stuttgart.de/en/).
+[![Image](Logo_LWW.JPG)](https://www.iws.uni-stuttgart.de/en/lww/)
 
