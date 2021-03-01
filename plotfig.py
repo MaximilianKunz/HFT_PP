@@ -20,8 +20,9 @@ def plot_grain(A, B):
     plt.title('Grain distribution plot')
     plt.xlabel ('Grain size in Milemeters')
     plt.ylabel ('Percent finer by Weight')
-    plt.show()
     plt.savefig('graindist.png', bbox_inches='tight')
+    plt.show()
+
 
 def plot_d50 (C):
     """
@@ -38,7 +39,8 @@ def plot_d50 (C):
     plt.title('Mean Diameter vs time')
     plt.xlabel('Time in seconds')
     plt.ylabel('Mean diameter')
-    plt.show()
     plt.savefig('plotd50.jpg', bbox_inches='tight')
+    plt.show()
+
 
 

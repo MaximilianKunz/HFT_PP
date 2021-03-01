@@ -6,7 +6,8 @@ class ReadSedResults:
         """
         This class provides all the functions to read result files of a Hydro-FT simulation
         and transform them into an array (pandas dataframe).
-        The class was written by Max with assistance of Maria for the get_timesteps and create_list_timesteps functions.
+        The class was written by Max with assistance of Maria for the get_timesteps, create_list_timesteps functions and the function
+        to get the files with just the timestep.
         :param file_name: File name of either the dataset of the active layer or under layer to import
         """
         self.nodes = int()
@@ -27,6 +28,7 @@ class ReadSedResults:
         self.create_list_nodes_columns()
         self.data_transformed = pd.DataFrame
         self.transform_data()
+        self.file_justTime(file_name)
 
     def get_datasets(self):
         """
@@ -148,3 +150,17 @@ class ReadSedResults:
                                     df_nodeid.reset_index(drop=True), df_data.reset_index(drop=True)], axis=1)
         # transformed dataframe
         self.data_transformed = df_transformed
+
+    def file_justTime(self, file_name):
+        """
+        Reads line by line the mesh file and returns the mesh file without the results. The output file gives
+        you a quick view of the time step and the simulated time.
+        """
+        count = 0
+        subdat = open("output.txt", "a")
+        file = open(file_name, 'r')
+        for line in iter(file):
+            count += 1
+            if line[:1].isalpha():
+                subdat.write(line)
+        file.close()

@@ -16,7 +16,6 @@ class Read2DM:
         self.num_fractions = int()
         self.get_num_fractions(file2dm)
         self.get_dm_fractions(file2dm)
-        self.file_justTime(file2dm)
 
     def get_num_nodes(self, file2dm):
         """
@@ -87,17 +86,3 @@ class Read2DM:
         dm_fractions2 = pd.DataFrame(dmfractions)
         dm_fractions = dm_fractions2.iloc[1:9, 3]
         return dm_fractions
-
-    def file_justTime(self, file2dm):
-        """
-        Reads line by line the mesh file and returns the mesh file without the results. The output file gives
-        you a quick view of the time step and the simulated time.
-        """
-        count = 0
-        subdat = open("output.txt", "a")
-        file = open(file2dm[0], 'r')
-        for line in iter(file):
-            count += 1
-            if line[:1].isalpha():
-                subdat.write(line)
-        file.close()

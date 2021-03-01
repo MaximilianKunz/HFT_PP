@@ -44,6 +44,8 @@ def create_array(name, file_name):
     # Export the dataframe as a csv-file
     layer.data_transformed.to_csv('Data_transformed_{}.csv'.format(name), index=False)
     df = layer.data_transformed
+    # Export the dataframe as a csv-file
+    layer.file_justTime(file_name)
 
     # Print information
     print("The array of the {0} has been successfully exported as Data_transformed_{0}.csv".format(name))
